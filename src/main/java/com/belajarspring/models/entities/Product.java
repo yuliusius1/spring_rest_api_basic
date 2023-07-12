@@ -1,6 +1,7 @@
 package com.belajarspring.models.entities;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import org.springframework.format.annotation.NumberFormat;
 
@@ -9,6 +10,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -28,14 +33,36 @@ public class Product implements Serializable {
     @Column(name="product_name", length = 100)
     private String name;
 
+    @NotEmpty(message = "Product desc is required")
     @Column(name="product_desc", length = 500)
     private String description;
 
-    @Min(value = 10, message = "Product price must be minimum 1")
-    @NotEmpty(message = "Product price is required")
     private double price;
+
+    @ManyToOne
+    private Category category;
+
+    @ManyToMany
+    @JoinTable(
+        name = "tbl_product_supplier",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "supplier_id")
+        )
+    private Set<Supplier> suppliers;
     
-    public Product() {
+    public Set<Supplier> getSuppliers() {
+        return suppliers;
+    }
+    public void setSuppliers(Set<Supplier> suppliers) {
+        this.suppliers = suppliers;
+    }
+    public Category getCategory() {
+        return category;
+    }
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+    public Product() { 
     }
     public Product(Long id, String name, String description, double price) {
         this.id = id;
