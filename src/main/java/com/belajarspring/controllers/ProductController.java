@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.belajarspring.dto.ResponseData;
+import com.belajarspring.dto.SupplierData;
 import com.belajarspring.models.entities.Product;
+import com.belajarspring.models.entities.Supplier;
 import com.belajarspring.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -75,6 +77,11 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id){
         productService.removeOne(id);
+    }
+
+    @PostMapping("/{id}")
+    public void addSupplier(@RequestBody Supplier supplier, @PathVariable("id") Long productId){
+        productService.addSupplier(supplier, productId);
     }
 
 }

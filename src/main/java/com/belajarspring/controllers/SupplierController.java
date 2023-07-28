@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.belajarspring.dto.ResponseData;
 import com.belajarspring.dto.SupplierData;
+import com.belajarspring.models.entities.Product;
 import com.belajarspring.models.entities.Supplier;
 import com.belajarspring.services.SupplierService;
 
@@ -87,6 +88,11 @@ public class SupplierController {
         responseData.setPayload(supplierService.save(supplier));
 
         return ResponseEntity.ok(responseData);
+    }
+
+    @PostMapping("/{id}")
+    public void addProduct(@RequestBody Product product, @PathVariable("id") Long supplierId){
+        supplierService.addProduct(product, supplierId);
     }
 
 }

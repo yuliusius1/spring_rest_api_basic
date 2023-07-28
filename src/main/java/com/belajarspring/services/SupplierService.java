@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.belajarspring.models.entities.Product;
 import com.belajarspring.models.entities.Supplier;
 import com.belajarspring.models.repos.SupplierRepo;
 
@@ -35,5 +36,14 @@ public class SupplierService {
 
     public void removeOne(Long id){
         supplierRepo.deleteById(id);
+    }
+
+    public void addProduct(Product product, Long supplierId){
+        Supplier supplier = findOne(supplierId);
+        if(supplier == null){
+            throw new RuntimeException("Supplier with id: "+supplierId+"Not found");
+        }
+        supplier.getProducts().add(product);
+        save(supplier);
     }
 }
