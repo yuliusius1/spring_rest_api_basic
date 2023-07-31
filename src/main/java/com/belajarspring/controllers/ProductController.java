@@ -98,4 +98,9 @@ public class ProductController {
     public Iterable<Product> getProductByCategory(@PathVariable("categoryId") Long categoryId) {
         return productService.findProductByCategory(categoryId);
     }
+
+    @GetMapping("/search/supplier/{supplierId}")
+    public Iterable<Product> getProductBySupplier(@PathVariable("supplierId") Long supplierId) {
+        return productService.findProductBySupplier(supplierId);
+    }
 }

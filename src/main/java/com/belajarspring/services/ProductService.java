@@ -1,5 +1,6 @@
 package com.belajarspring.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepo productRepo;
+
+    @Autowired
+    private SupplierService supplierService;
 
     public Product save(Product product) {
         return productRepo.save(product);
@@ -59,5 +63,14 @@ public class ProductService {
 
     public List<Product> findProductByCategory(Long categoryId) {
         return productRepo.findProductByCategory(categoryId);
+    }
+
+    public List<Product> findProductBySupplier(Long supplierId) {
+        // Dicari dulu supplier dengan id yang diberikan
+        Supplier supplier = supplierService.findOne(supplierId);
+        if (supplier == null) {
+            return new ArrayList<Product>();
+        }
+        return productRepo.findProductBySupplier(supplier);
     }
 }
