@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.belajarspring.dto.ResponseData;
+import com.belajarspring.dto.SearchData;
 import com.belajarspring.dto.SupplierData;
 import com.belajarspring.models.entities.Product;
 import com.belajarspring.models.entities.Supplier;
 import com.belajarspring.services.ProductService;
 
 import jakarta.validation.Valid;
-
 
 @RestController
 @RequestMapping("/api/products")
@@ -30,11 +30,11 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public ResponseEntity<ResponseData<Product>> create(@Valid @RequestBody Product product, Errors errors){
+    public ResponseEntity<ResponseData<Product>> create(@Valid @RequestBody Product product, Errors errors) {
 
         ResponseData<Product> responseData = new ResponseData<>();
 
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
             }
@@ -48,20 +48,20 @@ public class ProductController {
     }
 
     @GetMapping
-    public Iterable<Product> findAll(){
+    public Iterable<Product> findAll() {
         return productService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Product findOne(@PathVariable("id") Long id){
+    public Product findOne(@PathVariable("id") Long id) {
         return productService.findOne(id);
     }
 
     @PutMapping
-    public ResponseEntity<ResponseData<Product>> update(@Valid @RequestBody Product product, Errors errors){
+    public ResponseEntity<ResponseData<Product>> update(@Valid @RequestBody Product product, Errors errors) {
         ResponseData<Product> responseData = new ResponseData<>();
-        if(errors.hasErrors()){
-            for (ObjectError error : errors.getAllErrors()){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage()); // Untuk memasukkan pesan error ke dalam list
             }
             responseData.setStatus(false);
@@ -75,13 +75,27 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id){
+    public void delete(@PathVariable("id") Long id) {
         productService.removeOne(id);
     }
 
     @PostMapping("/{id}")
-    public void addSupplier(@RequestBody Supplier supplier, @PathVariable("id") Long productId){
+    public void addSupplier(@RequestBody Supplier supplier, @PathVariable("id") Long productId) {
         productService.addSupplier(supplier, productId);
     }
 
+    @PostMapping("/search/name")
+    public Product getProductByName(@RequestBody SearchData searchData) {
+        return productService.findByProductName(searchData.getSearchKey());
+    }
+
+    @PostMapping("/search/name-like")
+    public Iterable<Product> getProductByNameLike(@RequestBody SearchData searchData) {
+        return productService.findByNameContains(searchData.getSearchKey());
+    }
+
+    @GetMapping("/search/category/{categoryId}")
+    public Iterable<Product> getProductByCategory(@PathVariable("categoryId") Long categoryId) {
+        return productService.findProductByCategory(categoryId);
+    }
 }

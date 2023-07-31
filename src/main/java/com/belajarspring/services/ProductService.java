@@ -15,41 +15,49 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class ProductService {
-    
+
     @Autowired
     private ProductRepo productRepo;
 
-    public Product save(Product product){
+    public Product save(Product product) {
         return productRepo.save(product);
     }
 
-    public Product findOne(Long id){
+    public Product findOne(Long id) {
         Optional<Product> product = productRepo.findById(id);
-        if(!product.isPresent()){
+        if (!product.isPresent()) {
             return null;
         }
         return product.get();
     }
 
-    public Iterable<Product> findAll(){
+    public Iterable<Product> findAll() {
         return productRepo.findAll();
     }
 
-    public void removeOne(Long id){
+    public void removeOne(Long id) {
         productRepo.deleteById(id);
     }
 
-    public List<Product> findByNameContains(String name){
-        return productRepo.findByNameContains(name);
-    }
-
-    public void addSupplier(Supplier supplier, Long productId){
+    public void addSupplier(Supplier supplier, Long productId) {
         Product product = findOne(productId);
-        if(product == null){
+        if (product == null) {
             throw new RuntimeException("Product with id: " + productId + "Not found");
         }
 
         product.getSuppliers().add(supplier);
         save(product);
+    }
+
+    public List<Product> findByNameContains(String name) {
+        return productRepo.findByNameContains("%" + name + "%");
+    }
+
+    public Product findByProductName(String name) {
+        return productRepo.findByProductName(name);
+    }
+
+    public List<Product> findProductByCategory(Long categoryId) {
+        return productRepo.findProductByCategory(categoryId);
     }
 }
