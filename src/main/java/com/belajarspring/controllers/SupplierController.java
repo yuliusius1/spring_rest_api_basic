@@ -31,11 +31,11 @@ public class SupplierController {
     private ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<ResponseData<Supplier>> create(@Valid @RequestBody SupplierData supplierData, Errors errors){
+    public ResponseEntity<ResponseData<Supplier>> create(@Valid @RequestBody SupplierData supplierData, Errors errors) {
         ResponseData<Supplier> responseData = new ResponseData<>();
 
-        if(errors.hasErrors()){
-            for (ObjectError error: errors.getAllErrors()){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
             }
 
@@ -48,7 +48,7 @@ public class SupplierController {
         // supplier.setAddress(supplierData.getAddress());
         // supplier.setEmail(supplierData.getEmail());
         Supplier supplier = modelMapper.map(supplierData, Supplier.class);
-        
+
         responseData.setStatus(true);
         responseData.setPayload(supplierService.save(supplier));
 
@@ -56,21 +56,21 @@ public class SupplierController {
     }
 
     @GetMapping
-    public Iterable<Supplier> findAll(){
+    public Iterable<Supplier> findAll() {
         return supplierService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Supplier findOne(@PathVariable("id") Long id){
+    public Supplier findOne(@PathVariable("id") Long id) {
         return supplierService.findOne(id);
     }
 
     @PutMapping
-    public ResponseEntity<ResponseData<Supplier>> update(@Valid @RequestBody SupplierData supplierData, Errors errors){
+    public ResponseEntity<ResponseData<Supplier>> update(@Valid @RequestBody SupplierData supplierData, Errors errors) {
         ResponseData<Supplier> responseData = new ResponseData<>();
 
-        if(errors.hasErrors()){
-            for (ObjectError error: errors.getAllErrors()){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
             }
 
@@ -83,15 +83,15 @@ public class SupplierController {
         // supplier.setAddress(supplierData.getAddress());
         // supplier.setEmail(supplierData.getEmail());
         Supplier supplier = modelMapper.map(supplierData, Supplier.class);
-        
+
         responseData.setStatus(true);
         responseData.setPayload(supplierService.save(supplier));
 
         return ResponseEntity.ok(responseData);
     }
 
-    @PostMapping("/{id}")
-    public void addProduct(@RequestBody Product product, @PathVariable("id") Long supplierId){
+    @PostMapping(value = "/{id}", consumes = "application/json")
+    public void addProduct(@RequestBody Product product, @PathVariable("id") Long supplierId) {
         supplierService.addProduct(product, supplierId);
     }
 

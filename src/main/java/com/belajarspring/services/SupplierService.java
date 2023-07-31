@@ -14,34 +14,34 @@ import jakarta.transaction.TransactionScoped;
 @Service
 @TransactionScoped
 public class SupplierService {
-    
+
     @Autowired
     private SupplierRepo supplierRepo;
 
-    public Supplier save(Supplier supplier){
+    public Supplier save(Supplier supplier) {
         return supplierRepo.save(supplier);
     }
 
-    public Supplier findOne(Long id){
+    public Supplier findOne(Long id) {
         Optional<Supplier> supplier = supplierRepo.findById(id);
-        if(!supplier.isPresent()){
+        if (!supplier.isPresent()) {
             return null;
         }
         return supplier.get();
     }
 
-    public Iterable<Supplier> findAll(){
+    public Iterable<Supplier> findAll() {
         return supplierRepo.findAll();
     }
 
-    public void removeOne(Long id){
+    public void removeOne(Long id) {
         supplierRepo.deleteById(id);
     }
 
-    public void addProduct(Product product, Long supplierId){
+    public void addProduct(Product product, Long supplierId) {
         Supplier supplier = findOne(supplierId);
-        if(supplier == null){
-            throw new RuntimeException("Supplier with id: "+supplierId+"Not found");
+        if (supplier == null) {
+            throw new RuntimeException("Supplier with id: " + supplierId + "Not found");
         }
         supplier.getProducts().add(product);
         save(supplier);

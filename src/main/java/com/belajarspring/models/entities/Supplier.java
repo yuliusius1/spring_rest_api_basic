@@ -17,12 +17,10 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="tbl_supplier")
-@JsonIdentityInfo(
-    generator = ObjectIdGenerators.PropertyGenerator.class,
-    property = "id"
-)
-public class Supplier implements Serializable{
+@Table(name = "tbl_supplier")
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+// property = "id")
+public class Supplier implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,7 +38,7 @@ public class Supplier implements Serializable{
     private String email;
 
     @ManyToMany(mappedBy = "suppliers")
-    // @JsonBackReference
+    @JsonBackReference
     private Set<Product> products;
 
     public Set<Product> getProducts() {
@@ -83,5 +81,4 @@ public class Supplier implements Serializable{
         this.email = email;
     }
 
-    
 }
